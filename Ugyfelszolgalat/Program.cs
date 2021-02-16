@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace telefon
@@ -23,6 +24,8 @@ namespace telefon
         static void Main(string[] args)
         {
             int[] callsPerHours = new int[24];
+            List<CallData> calls = new List<CallData>();
+            //CallData[] calls = new CallData[1000];
             StreamReader file = new StreamReader("hivas.txt");
             bool readLineSuccesful = true;
             int maxCallLength = 0;
@@ -36,19 +39,19 @@ namespace telefon
                     readLineSuccesful = false;
                     break;
                 }
-                CallData callData = new CallData();
+                CallData alma = new CallData();
                 string[] lineData = line.Split(' ');
-                callData.startH = Int32.Parse(lineData[0]);
-                callData.startMin = Int32.Parse(lineData[1]);
-                callData.startSec = Int32.Parse(lineData[2]);
-                callData.endH = Int32.Parse(lineData[3]);
-                callData.endMin = Int32.Parse(lineData[4]);
-                callData.endSec = Int32.Parse(lineData[5]);
-
+                alma.startH = Int32.Parse(lineData[0]);
+                alma.startMin = Int32.Parse(lineData[1]);
+                alma.startSec = Int32.Parse(lineData[2]);
+                alma.endH = Int32.Parse(lineData[3]);
+                alma.endMin = Int32.Parse(lineData[4]);
+                alma.endSec = Int32.Parse(lineData[5]);
+                calls.Add(alma);
                 // 3. feladat
-                callsPerHours[callData.startH] += 1;
+                callsPerHours[alma.startH] += 1;
                 // 4. feladat
-                int callLength = Mpbe(callData.endH, callData.endMin, callData.endSec) - Mpbe(callData.startH, callData.startMin, callData.startSec);
+                int callLength = Mpbe(alma.endH, alma.endMin, alma.endSec) - Mpbe(alma.startH, alma.startMin, alma.startSec);
                 if (maxCallLength < callLength)
                 {
                     maxCallLength = callLength;
@@ -78,7 +81,27 @@ namespace telefon
             // Maximum keresés
             Console.WriteLine("5. feladat");
             Console.Write("Adjon meg egy idopontot 8 es 12 kozott! (ora perc masodperc) ");
-            Console.ReadLine();
+            string[] input = Console.ReadLine().Split(' ');
+            int hour = Int32.Parse(input[0]);
+            int min = Int32.Parse(input[1]);
+            int sec = Int32.Parse(input[2]);
+            
+            for (int call = 0; call < calls.Count; call++)
+            {
+                bool isCorrectLine = false;
+                if(calls[call].startH<=hour && hour<=calls[call].endH)  // óra
+                {
+                    if(calls[call].startMin <= min && min <= calls[call].endMin) // perc
+                    {
+                        if(calls[call].startSec <= sec && sec <= calls[call].endSec) // mp
+                        {
+                            isCorrectLine = true;
+                            
+                        }
+                    }
+                }
+            }
+
             Console.Write("\n");
             #endregion
         }
