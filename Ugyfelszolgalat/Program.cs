@@ -85,23 +85,63 @@ namespace telefon
             int hour = Int32.Parse(input[0]);
             int min = Int32.Parse(input[1]);
             int sec = Int32.Parse(input[2]);
-            
+            int callIndexInTime = -1; // what's the index of the caller currenty in line
             for (int call = 0; call < calls.Count; call++)
             {
                 bool isCorrectLine = false;
-                if(calls[call].startH<=hour && hour<=calls[call].endH)  // óra
+                if(calls[call].startH <= hour && hour <= calls[call].endH)  // óra
                 {
                     if(calls[call].startMin <= min && min <= calls[call].endMin) // perc
                     {
                         if(calls[call].startSec <= sec && sec <= calls[call].endSec) // mp
                         {
                             isCorrectLine = true;
-                            
                         }
                     }
                 }
+                if(isCorrectLine == true)
+                {
+                    callIndexInTime = call;
+                    break;
+                }
             }
-
+            if(callIndexInTime == -1)
+            {
+                Console.WriteLine("Nem volt beszélő.");
+            }
+            else
+            {
+                int waiting = 0;
+                bool isWaiting = true;
+                while(isWaiting)
+                {
+                    //if(calls[callIndexInTime + waiting + 1].startH <= calls[callIndexInTime].endH)
+                    //{
+                    //    if(calls[callIndexInTime + waiting + 1].startMin <= calls[callIndexInTime].endMin)
+                    //    {
+                    //        if(calls[callIndexInTime + waiting + 1].startMin == calls[callIndexInTime].endMin && calls[callIndexInTime + waiting + 1].startSec <= calls[callIndexInTime].endSec)
+                    //        {
+                                
+                    //        }
+                    //        if (calls[callIndexInTime + waiting + 1].endH >= hour)
+                    //        {
+                    //            if (calls[callIndexInTime + waiting + 1].endMin >= min)
+                    //            {
+                    //                if (calls[callIndexInTime + waiting + 1].endSec >= sec)
+                    //                {
+                    //                    isWaiting = true;
+                    //                }
+                    //            }
+                    //        }
+                    //    }
+                    //}
+                    if (isWaiting)
+                    {
+                        waiting += 1;
+                    }
+                }
+                Console.WriteLine($"A varakozok szama: {waiting} a beszelo a {callIndexInTime + 1}. hivo.");
+            }
             Console.Write("\n");
             #endregion
         }
