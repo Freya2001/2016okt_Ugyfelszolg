@@ -21,6 +21,58 @@ namespace telefon
         {
             return mp + p * 60 + o * 60 * 60;
         }
+        /// <summary>
+        /// Calculates the relation between the left and the right side of two times
+        /// </summary>
+        /// <param name="leftHour"></param>
+        /// <param name="leftMin"></param>
+        /// <param name="leftSec"></param>
+        /// <param name="rightHour"></param>
+        /// <param name="rightMin"></param>
+        /// <param name="rightSec"></param>
+        /// <returns>
+        /// -1 if the left time values is smaller than the right
+        /// 0 if the two time values are equal
+        /// 1 if the left time value is greater than the right
+        /// </returns>
+        static int CompareTime(int leftHour, int leftMin, int leftSec, int rightHour, int rightMin, int rightSec)
+        {
+            if(leftHour > rightHour)
+            {
+                return 1;
+            }
+            else if(leftHour < rightHour)
+            {
+                return -1;
+            }
+            else
+            {
+                if (leftMin > rightMin)
+                {
+                    return 1;
+                }
+                else if (leftMin < rightMin)
+                {
+                    return -1;
+                }
+                else
+                {
+                    if (leftSec > rightSec)
+                    {
+                        return 1;
+                    }
+                    else if (leftSec < rightSec)
+                    {
+                        return -1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+            }
+        }
+
         static void Main(string[] args)
         {
             int[] callsPerHours = new int[24];
@@ -115,24 +167,19 @@ namespace telefon
                 bool isWaiting = true;
                 while(isWaiting)
                 {
-                    //if(calls[callIndexInTime + waiting + 1].startH <= calls[callIndexInTime].endH)
+                    //if(!(CompareTime
+                    //    (
+                    //        calls[callIndexInTime + waiting + 1].startH, calls[callIndexInTime + waiting + 1].startMin, calls[callIndexInTime + waiting + 1].startSec, 
+                    //        calls[callIndexInTime].endH, calls[callIndexInTime].endMin, calls[callIndexInTime].endSec
+                    //    ) == -1 ))
                     //{
-                    //    if(calls[callIndexInTime + waiting + 1].startMin <= calls[callIndexInTime].endMin)
+                    //    if(!(CompareTime
+                    //    (
+                    //        calls[callIndexInTime + waiting + 1].endH, calls[callIndexInTime + waiting + 1].endMin, calls[callIndexInTime + waiting + 1].endSec,
+                    //        hour, min, sec
+                    //    ) == -1))
                     //    {
-                    //        if(calls[callIndexInTime + waiting + 1].startMin == calls[callIndexInTime].endMin && calls[callIndexInTime + waiting + 1].startSec <= calls[callIndexInTime].endSec)
-                    //        {
-                                
-                    //        }
-                    //        if (calls[callIndexInTime + waiting + 1].endH >= hour)
-                    //        {
-                    //            if (calls[callIndexInTime + waiting + 1].endMin >= min)
-                    //            {
-                    //                if (calls[callIndexInTime + waiting + 1].endSec >= sec)
-                    //                {
-                    //                    isWaiting = true;
-                    //                }
-                    //            }
-                    //        }
+                    //        isWaiting = false;
                     //    }
                     //}
                     if (isWaiting)
