@@ -141,17 +141,19 @@ namespace telefon
             for (int call = 0; call < calls.Count; call++)
             {
                 bool isCorrectLine = false;
-                // TODO: itt is comparetime-ot kellene használni, mert itt se jó, ha a jó perc után rossz másodpercet kapunk, ezért nem a jó sort ismertük fel elsőként (272 helyett 273)
-                //if (calls[call].startH <= hour && hour <= calls[call].endH)  // óra
-                //{
-                //    if (calls[call].startMin <= min && min <= calls[call].endMin) // perc
-                //    {
-                //        if (calls[call].startSec <= sec && sec <= calls[call].endSec) // mp
-                //        {
-                //            isCorrectLine = true;
-                //        }
-                //    }
-                //}
+                if (CompareTime
+                        (
+                            calls[call].startH, calls[call].startMin, calls[call].startSec,
+                            hour, min, sec
+                        ) == -1 &&
+                    CompareTime
+                        (
+                            hour, min, sec, 
+                            calls[call].endH, calls[call].endMin, calls[call].endSec
+                        ) == -1 )
+                {
+                    isCorrectLine = true;
+                }
                 if (isCorrectLine == true)
                 {
                     callIndexInTime = call;
@@ -171,14 +173,20 @@ namespace telefon
                     if(!(
                         CompareTime
                         (
-                            calls[callIndexInTime + waiting + 1].endH, calls[callIndexInTime + waiting + 1].endMin, calls[callIndexInTime + waiting + 1].endSec, 
-                            hour, min, sec
+                            hour, min, sec,
+                            calls[callIndexInTime + waiting + 1].endH, calls[callIndexInTime + waiting + 1].endMin, calls[callIndexInTime + waiting + 1].endSec 
                         ) == -1 &&
                         CompareTime
                         (
                             calls[callIndexInTime + waiting + 1].startH, calls[callIndexInTime + waiting + 1].startMin, calls[callIndexInTime + waiting + 1].startSec, 
                             calls[callIndexInTime].endH, calls[callIndexInTime].endMin, calls[callIndexInTime].endSec
-                        ) == -1 ))
+                        ) == -1 && 
+                        CompareTime 
+                        (
+                            calls[callIndexInTime + waiting + 1].startH, calls[callIndexInTime + waiting + 1].startMin, calls[callIndexInTime + waiting + 1].startSec,
+                            hour, min, sec
+                        ) == -1
+                        ))
                     {
                         isWaiting = false;
                     }
