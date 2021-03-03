@@ -35,42 +35,55 @@ namespace telefon
         /// 0 if the two time values are equal
         /// 1 if the left time value is greater than the right
         /// </returns>
+        /// 
+        static int CmpInt(int left, int right)
+        { // sign of (left-right)
+            if (left > right) return 1;
+            else if (left < right) return -1;
+            else return 0;
+        }
         static int CompareTime(int leftHour, int leftMin, int leftSec, int rightHour, int rightMin, int rightSec)
         {
-            if(leftHour > rightHour)
-            {
-                return 1;
-            }
-            else if(leftHour < rightHour)
-            {
-                return -1;
-            }
-            else
-            {
-                if (leftMin > rightMin)
-                {
-                    return 1;
-                }
-                else if (leftMin < rightMin)
-                {
-                    return -1;
-                }
-                else
-                {
-                    if (leftSec > rightSec)
-                    {
-                        return 1;
-                    }
-                    else if (leftSec < rightSec)
-                    {
-                        return -1;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                }
-            }
+            int res = CmpInt(leftHour, rightHour);
+            if (res != 0) return res;
+            res = CmpInt(leftMin, rightMin);
+            if (res != 0) return res;
+            return CmpInt(leftSec, rightSec);
+
+            //if (leftHour > rightHour)
+            //{
+            //    return 1;
+            //}
+            //else if(leftHour < rightHour)
+            //{
+            //    return -1;
+            //}
+            //else
+            //{
+            //    if (leftMin > rightMin)
+            //    {
+            //        return 1;
+            //    }
+            //    else if (leftMin < rightMin)
+            //    {
+            //        return -1;
+            //    }
+            //    else
+            //    {
+            //        if (leftSec > rightSec)
+            //        {
+            //            return 1;
+            //        }
+            //        else if (leftSec < rightSec)
+            //        {
+            //            return -1;
+            //        }
+            //        else
+            //        {
+            //            return 0;
+            //        }
+            //    }
+            //}
         }
 
         static void Main(string[] args)
@@ -170,20 +183,21 @@ namespace telefon
                 bool isWaiting = true;
                 while(isWaiting)
                 {
-                    if(!(
+                    int nextwaiting = callIndexInTime + waiting + 1;
+                    if (!(
                         CompareTime
                         (
                             hour, min, sec,
-                            calls[callIndexInTime + waiting + 1].endH, calls[callIndexInTime + waiting + 1].endMin, calls[callIndexInTime + waiting + 1].endSec 
+                            calls[nextwaiting].endH, calls[nextwaiting].endMin, calls[nextwaiting].endSec 
                         ) == -1 &&
                         CompareTime
                         (
-                            calls[callIndexInTime + waiting + 1].startH, calls[callIndexInTime + waiting + 1].startMin, calls[callIndexInTime + waiting + 1].startSec, 
+                            calls[nextwaiting].startH, calls[nextwaiting].startMin, calls[nextwaiting].startSec, 
                             calls[callIndexInTime].endH, calls[callIndexInTime].endMin, calls[callIndexInTime].endSec
                         ) == -1 && 
                         CompareTime 
                         (
-                            calls[callIndexInTime + waiting + 1].startH, calls[callIndexInTime + waiting + 1].startMin, calls[callIndexInTime + waiting + 1].startSec,
+                            calls[nextwaiting].startH, calls[nextwaiting].startMin, calls[nextwaiting].startSec,
                             hour, min, sec
                         ) == -1
                         ))
